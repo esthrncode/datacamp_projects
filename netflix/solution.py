@@ -1,36 +1,32 @@
-# Importing pandas and matplotlib
+
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Start coding!
 
-netflix_df = pd.read_csv('netflix_data.csv')
+netflix_df = pd.read_csv("netflix_data.csv")
 
 netflix_subset = netflix_df[netflix_df["type"] == "Movie"]
 
-netflix_movies = netflix_subset[["title", "country", "genre", "release_year", "duration"]]
+subset = netflix_subset[(netflix_subset["release_year"] > 1990)]
 
-short_movies = netflix_movies[netflix_movies.duration < 60]
+movies_1990s = subset[(subset["release_year"] < 2000)]
 
-colors = []
-for label, row in netflix_movies.iterrows() :
-    if row["genre"] == "Children" :
-        colors.append("pink")
-    elif row["genre"] == "Documentaries" :
-        colors.append("grey")
-    elif row["genre"] == "Stand-Up":
-        colors.append("green")
-    else:
-        colors.append("red")
-
-
-fig = plt.figure(figsize=(12,8))
-plt.scatter(netflix_movies.release_year, netflix_movies.duration, c=colors)
-
-plt.title("Movie Duration by Year of Release")
-plt.xlabel("Release year")
-plt.ylabel("Duration (min)")
-
+plt.hist(movies_1990s["duration"])
+plt.title('Distribution of Movie Durations in the 1990s')
+plt.xlabel('Duration (minutes)')
+plt.ylabel('Number of Movies')
 plt.show()
 
-answer = "no"
+duration = 100
+
+action_movies_1990s = movies_1990s[movies_1990s["genre"] == "Action"]
+
+short_movie_count = 0
+
+for label, row in action_movies_1990s.iterrows() :
+    if row["duration"] < 90 :
+        short_movie_count = short_movie_count + 1
+    else:
+        short_movie_count = short_movie_count
+
+print(short_movie_count)
